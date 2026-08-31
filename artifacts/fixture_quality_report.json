@@ -1,0 +1,68 @@
+{
+  "mode": "fixture",
+  "rules": 12,
+  "passed": 12,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "事件非空",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "时间范围",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "用户标识非空",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "事件名非空",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "事件去重",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "收入非负",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "购买收入口径",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "日汇总行数",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "日事件对账",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "漏斗单调",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "队列0周完整",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "订单ID非空",
+      "failures": 0,
+      "status": "passed"
+    }
+  ]
+}

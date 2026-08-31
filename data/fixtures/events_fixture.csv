@@ -1,0 +1,22 @@
+event_date,event_timestamp,event_name,user_pseudo_id,session_id,source,medium,campaign,page_location,transaction_id,purchase_revenue,total_item_quantity,device_category,country
+2020-11-01,2020-11-01 09:00:00,page_view,u1,u1-1,google,organic,(not set),/home,,0,0,desktop,United States
+2020-11-01,2020-11-01 09:01:00,view_item,u1,u1-1,google,organic,(not set),/p/1,,0,0,desktop,United States
+2020-11-01,2020-11-01 09:02:00,add_to_cart,u1,u1-1,google,organic,(not set),/p/1,,0,1,desktop,United States
+2020-11-01,2020-11-01 09:03:00,begin_checkout,u1,u1-1,google,organic,(not set),/checkout,,0,1,desktop,United States
+2020-11-01,2020-11-01 09:04:00,purchase,u1,u1-1,google,organic,(not set),/thank-you,t1,99.5,1,desktop,United States
+2020-11-01,2020-11-01 10:00:00,page_view,u2,u2-1,(direct),(none),(not set),/home,,0,0,mobile,Canada
+2020-11-01,2020-11-01 10:01:00,view_item,u2,u2-1,(direct),(none),(not set),/p/2,,0,0,mobile,Canada
+2020-11-01,2020-11-01 10:02:00,add_to_cart,u2,u2-1,(direct),(none),(not set),/p/2,,0,1,mobile,Canada
+2020-11-02,2020-11-02 11:00:00,page_view,u3,u3-1,newsletter,email,november,/home,,0,0,tablet,United States
+2020-11-02,2020-11-02 11:01:00,view_item,u3,u3-1,newsletter,email,november,/p/3,,0,0,tablet,United States
+2020-11-02,2020-11-02 11:02:00,add_to_cart,u3,u3-1,newsletter,email,november,/p/3,,0,1,tablet,United States
+2020-11-02,2020-11-02 11:03:00,begin_checkout,u3,u3-1,newsletter,email,november,/checkout,,0,1,tablet,United States
+2020-11-03,2020-11-03 12:00:00,page_view,u4,u4-1,youtube,referral,video,/home,,0,0,mobile,India
+2020-11-03,2020-11-03 12:01:00,view_item,u4,u4-1,youtube,referral,video,/p/4,,0,0,mobile,India
+2020-11-03,2020-11-03 12:02:00,add_to_cart,u4,u4-1,youtube,referral,video,/p/4,,0,1,mobile,India
+2020-11-03,2020-11-03 12:03:00,begin_checkout,u4,u4-1,youtube,referral,video,/checkout,,0,1,mobile,India
+2020-11-03,2020-11-03 12:04:00,purchase,u4,u4-1,youtube,referral,video,/thank-you,t2,45.0,1,mobile,India
+2020-11-08,2020-11-08 09:00:00,page_view,u1,u1-2,google,organic,(not set),/home,,0,0,desktop,United States
+2020-11-08,2020-11-08 09:01:00,view_item,u1,u1-2,google,organic,(not set),/p/5,,0,0,desktop,United States
+2020-11-09,2020-11-09 14:00:00,page_view,u5,u5-1,google,cpc,winter,/home,,0,0,mobile,United Kingdom
+

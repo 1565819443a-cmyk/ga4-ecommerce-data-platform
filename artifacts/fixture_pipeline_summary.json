@@ -1,0 +1,8 @@
+{
+  "mode": "fixture",
+  "events": 20,
+  "users": 5,
+  "days": 5,
+  "orders": 2,
+  "revenue": 144.5
+}

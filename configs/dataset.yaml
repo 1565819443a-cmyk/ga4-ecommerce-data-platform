@@ -1,0 +1,21 @@
+dataset_id: ga4_official_ecommerce_202011_202101
+name_zh: Google 官方 GA4 电商样例
+source: bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*
+grain: 一行一个 GA4 事件
+date_range: [2020-11-01, 2021-01-31]
+layers:
+  ods: ods.events
+  dwd: dwd.events
+  dws: dws.session_summary
+  ads: [ads.daily_kpi, ads.funnel, ads.cohort_retention]
+semantic_mapping:
+  user_id: user_pseudo_id
+  event_id: [event_timestamp, event_name, user_pseudo_id]
+  order_id: transaction_id
+  time: event_timestamp
+  amount: purchase_revenue
+  channel: source
+  campaign: campaign
+  event_type: event_name
+capabilities: [overview, trend, funnel, retention, channel, campaign, user_segmentation]
+

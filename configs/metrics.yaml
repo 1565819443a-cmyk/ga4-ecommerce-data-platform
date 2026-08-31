@@ -1,0 +1,38 @@
+metrics:
+  - id: users
+    name_zh: 用户数
+    expression: count(distinct user_pseudo_id)
+    source: dwd.events
+    owner: 电商经营分析
+    version: 1.0.0
+  - id: sessions
+    name_zh: 会话数
+    expression: count(distinct session_id)
+    source: dwd.events
+    owner: 电商经营分析
+    version: 1.0.0
+  - id: purchasers
+    name_zh: 购买用户数
+    expression: count(distinct user_pseudo_id) filter (where event_name='purchase')
+    source: dwd.events
+    owner: 电商经营分析
+    version: 1.0.0
+  - id: orders
+    name_zh: 订单数
+    expression: count(distinct transaction_id) filter (where event_name='purchase')
+    source: dwd.events
+    owner: 电商经营分析
+    version: 1.0.0
+  - id: revenue
+    name_zh: 收入
+    expression: sum(purchase_revenue)
+    source: dwd.events
+    owner: 电商经营分析
+    version: 1.0.0
+  - id: purchase_conversion
+    name_zh: 会话购买转化率
+    expression: purchasing_sessions / sessions
+    source: dws.session_summary
+    owner: 增长分析
+    version: 1.0.0
+

@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+data/raw/*
+data/processed/*
+data/platform/*.parquet
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+artifacts/ga4.duckdb
+credentials*.json
+
