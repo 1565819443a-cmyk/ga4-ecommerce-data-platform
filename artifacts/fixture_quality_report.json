@@ -1,7 +1,7 @@
 {
   "mode": "fixture",
-  "rules": 12,
-  "passed": 12,
+  "rules": 14,
+  "passed": 14,
   "failed": 0,
   "checks": [
     {
@@ -61,6 +61,16 @@
     },
     {
       "name": "订单ID非空",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "商品数量为正",
+      "failures": 0,
+      "status": "passed"
+    },
+    {
+      "name": "商品收入非负",
       "failures": 0,
       "status": "passed"
     }

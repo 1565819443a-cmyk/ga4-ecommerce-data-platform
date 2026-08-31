@@ -20,6 +20,8 @@ RULES = [
     ("漏斗单调", "select count(*) from (select users,lag(users) over(order by step_order) prev from ads.funnel) where prev is not null and users>prev"),
     ("队列0周完整", "select count(*) from ads.cohort_retention where week_number=0 and retention_rate_pct<>100"),
     ("订单ID非空", "select count(*) from dwd.events where event_name='purchase' and transaction_id is null"),
+    ("商品数量为正", "select count(*) from dwd.items where quantity is null or quantity<=0"),
+    ("商品收入非负", "select count(*) from dwd.items where item_revenue<0"),
 ]
 
 
@@ -34,4 +36,3 @@ def run(settings: Settings) -> dict:
     target="fixture_quality_report.json" if settings.fixture_mode else "quality_report.json"
     (settings.root/"artifacts"/target).write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
     return result
-

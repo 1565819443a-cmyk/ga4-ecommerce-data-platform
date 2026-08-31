@@ -64,6 +64,11 @@ def anomalies():
     return query("SELECT * FROM ads.daily_anomaly WHERE is_anomaly ORDER BY event_date")
 
 
+@app.get("/api/products")
+def products():
+    return query("SELECT * FROM ads.product_summary ORDER BY item_revenue DESC LIMIT 50")
+
+
 @app.get("/")
 def dashboard():
     return FileResponse(Settings.load().root / "dashboard/index.html")

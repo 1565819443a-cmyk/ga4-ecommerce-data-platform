@@ -31,6 +31,19 @@ def build(settings: Settings | None = None) -> dict:
       FROM ods.events WHERE user_pseudo_id IS NOT NULL AND event_name IS NOT NULL
       QUALIFY row_number() OVER (PARTITION BY event_timestamp,event_name,user_pseudo_id,coalesce(transaction_id,'') ORDER BY event_timestamp)=1
     """)
+    items_file = s.source_file.parent / ("items_fixture.csv" if s.fixture_mode else "ga4_items.parquet")
+    con.execute("DROP TABLE IF EXISTS dwd.items")
+    if items_file.exists():
+        items_reader = "read_csv_auto(?, header=true)" if items_file.suffix == ".csv" else "read_parquet(?)"
+        con.execute(f"""
+          CREATE TABLE dwd.items AS SELECT cast(event_date AS DATE) event_date,
+            cast(event_timestamp AS TIMESTAMP) event_timestamp,event_name,user_pseudo_id,transaction_id,
+            item_id,item_name,item_brand,item_category,try_cast(price AS DOUBLE) price,
+            try_cast(quantity AS BIGINT) quantity,greatest(coalesce(try_cast(item_revenue AS DOUBLE),0),0) item_revenue
+          FROM {items_reader}
+        """, [str(items_file)])
+    else:
+        con.execute("""CREATE TABLE dwd.items(event_date DATE,event_timestamp TIMESTAMP,event_name VARCHAR,user_pseudo_id VARCHAR,transaction_id VARCHAR,item_id VARCHAR,item_name VARCHAR,item_brand VARCHAR,item_category VARCHAR,price DOUBLE,quantity BIGINT,item_revenue DOUBLE)""")
     con.execute("DROP TABLE IF EXISTS dws.session_summary")
     con.execute("""
       CREATE TABLE dws.session_summary AS
@@ -115,12 +128,19 @@ def build(settings: Settings | None = None) -> dict:
     """)
     con.execute("DROP TABLE IF EXISTS ads.build_metadata")
     con.execute("CREATE TABLE ads.build_metadata AS SELECT ? data_mode,current_timestamp built_at", ["fixture" if s.fixture_mode else "official_bigquery_export"])
+    con.execute("DROP TABLE IF EXISTS ads.product_summary")
+    con.execute("""
+      CREATE TABLE ads.product_summary AS SELECT coalesce(item_id,'(missing)') item_id,
+        coalesce(item_name,'(not set)') item_name,coalesce(item_category,'(not set)') item_category,
+        count(*) item_event_rows,sum(coalesce(quantity,0)) quantity,round(sum(item_revenue),2) item_revenue
+      FROM dwd.items GROUP BY item_id,item_name,item_category ORDER BY item_revenue DESC
+    """)
     platform_dir = s.root / "data/platform"
     platform_dir.mkdir(parents=True, exist_ok=True)
-    for table, file in [("dwd.events","ga4_events"),("ads.daily_kpi","ga4_daily_kpi"),("ads.funnel","ga4_funnel"),("ads.channel_summary","ga4_channel_summary"),("ads.user_value","ga4_user_value")]:
+    for table, file in [("dwd.events","ga4_events"),("dwd.items","ga4_items"),("ads.daily_kpi","ga4_daily_kpi"),("ads.funnel","ga4_funnel"),("ads.channel_summary","ga4_channel_summary"),("ads.user_value","ga4_user_value"),("ads.product_summary","ga4_product_summary")]:
         path = (platform_dir / f"{file}.parquet").as_posix().replace("'", "''")
         con.execute(f"COPY {table} TO '{path}' (FORMAT PARQUET, COMPRESSION ZSTD)")
-    result = {"mode": "fixture" if s.fixture_mode else "official_bigquery_export", "events": con.execute("select count(*) from dwd.events").fetchone()[0], "users": con.execute("select count(distinct user_pseudo_id) from dwd.events").fetchone()[0], "days": con.execute("select count(distinct event_date) from dwd.events").fetchone()[0], "orders": con.execute("select count(distinct transaction_id) from dwd.events where event_name='purchase'").fetchone()[0], "revenue": con.execute("select round(sum(purchase_revenue),2) from dwd.events").fetchone()[0]}
+    result = {"mode": "fixture" if s.fixture_mode else "official_bigquery_export", "events": con.execute("select count(*) from dwd.events").fetchone()[0], "item_rows": con.execute("select count(*) from dwd.items").fetchone()[0], "users": con.execute("select count(distinct user_pseudo_id) from dwd.events").fetchone()[0], "days": con.execute("select count(distinct event_date) from dwd.events").fetchone()[0], "orders": con.execute("select count(distinct transaction_id) from dwd.events where event_name='purchase'").fetchone()[0], "revenue": con.execute("select round(sum(purchase_revenue),2) from dwd.events").fetchone()[0]}
     (s.root / "artifacts").mkdir(exist_ok=True)
     target = "fixture_pipeline_summary.json" if s.fixture_mode else "pipeline_summary.json"
     (s.root / "artifacts" / target).write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

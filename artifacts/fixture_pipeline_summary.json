@@ -1,6 +1,7 @@
 {
   "mode": "fixture",
   "events": 20,
+  "item_rows": 2,
   "users": 5,
   "days": 5,
   "orders": 2,

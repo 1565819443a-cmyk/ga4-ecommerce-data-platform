@@ -1,0 +1,4 @@
+event_date,event_timestamp,event_name,user_pseudo_id,transaction_id,item_id,item_name,item_brand,item_category,price,quantity,item_revenue
+2020-11-01,2020-11-01 09:04:00,purchase,u1,t1,i1,Fixture Shirt,Demo,Apparel,99.5,1,99.5
+2020-11-03,2020-11-03 12:04:00,purchase,u4,t2,i2,Fixture Mug,Demo,Home,45.0,1,45.0
+

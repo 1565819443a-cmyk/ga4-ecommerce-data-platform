@@ -8,7 +8,7 @@
 
 ## 当前可复现状态
 
-工程代码、BigQuery SQL、本地四层数仓、12 条质量规则、API、看板和 8 个自动化测试均已完成。官方数据源固定为 `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`，日期为 **2020-11-01 至 2021-01-31**。
+工程代码、BigQuery SQL、本地四层数仓、14 条质量规则、API、看板和 8 个自动化测试均已完成。官方数据源固定为 `bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*`，日期为 **2020-11-01 至 2021-01-31**。
 
 当前仓库没有提交或伪造正式业务结果：正式提取需要一个已登录、启用 BigQuery 的 Google Cloud 项目。`data/fixtures/events_fixture.csv` 只有 20 行，页面会显示醒目的 **TEST FIXTURE** 标识，任何 `fixture_*` artifact 都不能写入简历。完成云端登录后，一条命令即可生成正式 `pipeline_summary.json` 与真实截图。
 
@@ -41,7 +41,7 @@ BigQuery 提取 SQL 使用相关子查询解析 `event_params`，单独 `UNNEST(
 
 ## 质量保障
 
-12 条规则覆盖时间范围、用户与事件标识、重复事件、收入非负、购买与收入一致性、日汇总对账、漏斗单调性、留存 0 周完整性和购买订单 ID。CI 用明确标记的小 fixture 完整运行所有层；正式导出会产生独立的非 fixture 报告。
+14 条规则覆盖时间范围、用户与事件标识、重复事件、收入非负、购买与收入一致性、日汇总对账、漏斗单调性、留存 0 周完整性、购买订单 ID、商品数量与商品收入。CI 用明确标记的小 fixture 完整运行所有层；正式导出会产生独立的非 fixture 报告。
 
 ## 产品交付
 
@@ -69,7 +69,7 @@ BigQuery 查询设置 20 GB `maximum_bytes_billed` 安全上限并启用缓存�
 ## 测试验收
 
 - pytest：8 passed / 0 failed（本地实际执行）
-- fixture 数据质量：12 passed / 0 failed
+- fixture 数据质量：14 passed / 0 failed
 - BigQuery SQL：校验官方表、UNNEST、日期边界和非法范围
 - 正式数据处理量与结果：等待 Google Cloud 登录后由脚本实际生成，当前不编造
 
