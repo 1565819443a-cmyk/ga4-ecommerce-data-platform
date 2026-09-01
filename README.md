@@ -1,5 +1,7 @@
 # 基于 GA4 真实数据的电商经营分析与数据治理平台
 
+[![CI](https://github.com/1565819443a-cmyk/ga4-ecommerce-data-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/1565819443a-cmyk/ga4-ecommerce-data-platform/actions/workflows/ci.yml)
+
 > GA4 Ecommerce Analytics & Data Platform — Google 官方 BigQuery 电商事件样例的嵌套解析、数仓分层、漏斗留存、质量治理与 BI 交付。
 
 ![fixture 看板验证截图](docs/screenshots/fixture-dashboard.png)
@@ -41,7 +43,7 @@ BigQuery 提取 SQL 使用相关子查询解析 `event_params`，单独 `UNNEST(
 
 ## 质量保障
 
-14 条规则覆盖时间范围、用户与事件标识、重复事件、收入非负、购买与收入一致性、日汇总对账、漏斗单调性、留存 0 周完整性、购买订单 ID、商品数量与商品收入。本地已用明确标记的小 fixture 完整运行所有层；正式导出会产生独立的非 fixture 报告。GitHub Actions workflow 已在本地准备，当前因 OAuth token 缺少 `workflow` scope 尚未能上传，不声称线上 CI 已通过。
+14 条规则覆盖时间范围、用户与事件标识、重复事件、收入非负、购买与收入一致性、日汇总对账、漏斗单调性、留存 0 周完整性、购买订单 ID、商品数量与商品收入。本地已用明确标记的小 fixture 完整运行所有层；正式导出会产生独立的非 fixture 报告。[GitHub Actions run 33464767410](https://github.com/1565819443a-cmyk/ga4-ecommerce-data-platform/actions/runs/33464767410) 已实际通过。
 
 ## 产品交付
 
