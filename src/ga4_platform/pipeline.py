@@ -135,7 +135,7 @@ def build(settings: Settings | None = None) -> dict:
         count(*) item_event_rows,sum(coalesce(quantity,0)) quantity,round(sum(item_revenue),2) item_revenue
       FROM dwd.items GROUP BY item_id,item_name,item_category ORDER BY item_revenue DESC
     """)
-    platform_dir = s.root / "data/platform"
+    platform_dir = s.root / ("data/platform_fixture" if s.fixture_mode else "data/platform")
     platform_dir.mkdir(parents=True, exist_ok=True)
     for table, file in [("dwd.events","ga4_events"),("dwd.items","ga4_items"),("ads.daily_kpi","ga4_daily_kpi"),("ads.funnel","ga4_funnel"),("ads.channel_summary","ga4_channel_summary"),("ads.user_value","ga4_user_value"),("ads.product_summary","ga4_product_summary")]:
         path = (platform_dir / f"{file}.parquet").as_posix().replace("'", "''")

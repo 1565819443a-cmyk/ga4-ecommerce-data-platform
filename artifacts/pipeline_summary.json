@@ -1,0 +1,9 @@
+{
+  "mode": "official_bigquery_export",
+  "events": 4295584,
+  "item_rows": 3982732,
+  "users": 270154,
+  "days": 92,
+  "orders": 4452,
+  "revenue": 362165.0
+}

@@ -1,1 +1,40 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GA4 电商经营分析</title><script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script><style>body{margin:0;background:#f4f7fb;color:#172033;font-family:Inter,"Microsoft YaHei",sans-serif}.shell{max-width:1240px;margin:auto;padding:30px}.eyebrow{color:#5b5bd6;font-weight:700;letter-spacing:.1em}.meta{color:#718096}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}.card,.panel{background:white;border:1px solid #e4e9f2;border-radius:16px;padding:18px;box-shadow:0 8px 24px #1f3b6d0d}.value{font-size:28px;font-weight:750;margin-top:8px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.chart{height:360px}.badge{display:inline-block;background:#fff3cd;color:#805b10;padding:8px 12px;border-radius:9px;margin-top:14px}@media(max-width:800px){.cards,.grid{grid-template-columns:1fr}}</style></head><body><div class="shell"><div class="eyebrow">GOOGLE OFFICIAL GA4 BIGQUERY SAMPLE</div><h1>电商经营分析与数据治理平台</h1><div class="meta">2020-11-01 — 2021-01-31 · 事件、会话、漏斗、留存与渠道统一口径</div><div id="mode"></div><div class="cards" id="cards"></div><div class="grid"><div class="panel"><h3>日趋势</h3><div id="trend" class="chart"></div></div><div class="panel"><h3>顺序漏斗</h3><div id="funnel" class="chart"></div></div></div></div><script>const f=n=>new Intl.NumberFormat('zh-CN',{maximumFractionDigits:1}).format(n||0);Promise.all([fetch('/api/summary').then(r=>r.json()),fetch('/api/trend').then(r=>r.json()),fetch('/api/funnel').then(r=>r.json())]).then(([s,t,u])=>{if(s.data_mode==='fixture')document.querySelector('#mode').innerHTML='<span class="badge">TEST FIXTURE · 仅用于自动化验证，不代表真实业务结论</span>';document.querySelector('#cards').innerHTML=[['事件',f(s.events)],['订单',f(s.orders)],['收入','$'+f(s.revenue)],['覆盖日期',`${s.start_date?.slice(0,10)} ~ ${s.end_date?.slice(0,10)}`]].map(x=>`<div class="card"><div class="meta">${x[0]}</div><div class="value">${x[1]}</div></div>`).join('');echarts.init(document.querySelector('#trend')).setOption({tooltip:{trigger:'axis'},legend:{data:['用户','会话']},xAxis:{type:'category',data:t.map(x=>x.event_date.slice(0,10))},yAxis:{type:'value'},series:[{name:'用户',type:'line',smooth:true,data:t.map(x=>x.users)},{name:'会话',type:'line',smooth:true,data:t.map(x=>x.sessions)}]});echarts.init(document.querySelector('#funnel')).setOption({tooltip:{trigger:'item'},series:[{type:'funnel',data:u.map(x=>({name:x.step,value:x.users})),label:{formatter:'{b}: {c}'}}]})});</script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Google 官方 GA4 BigQuery 电商样例数据经营分析看板">
+  <title>GA4 电商经营分析</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="eyebrow">GOOGLE OFFICIAL GA4 BIGQUERY SAMPLE</div>
+      <h1>电商经营分析与数据治理平台</h1>
+      <p class="subtitle">4.3M 级事件的用户、会话、顺序漏斗、留存、渠道与商品统一口径</p>
+      <div class="source-line"><span class="dot"></span> 官方公开数据 · 2020-11-01 — 2021-01-31 · 最近构建：本地全量流水线</div>
+      <div id="mode"></div>
+    </header>
+
+    <section class="cards" id="cards" aria-label="核心经营指标"></section>
+
+    <section class="grid grid-main">
+      <article class="panel"><div class="panel-head"><div><span class="kicker">TRAFFIC</span><h2>用户与会话日趋势</h2></div><span class="hint">92 天</span></div><div id="trend" class="chart"></div></article>
+      <article class="panel"><div class="panel-head"><div><span class="kicker">CONVERSION</span><h2>用户顺序漏斗</h2></div></div><div id="funnel" class="chart"></div></article>
+    </section>
+
+    <section class="grid">
+      <article class="panel"><div class="panel-head"><div><span class="kicker">ACQUISITION</span><h2>渠道收入与转化</h2></div></div><div id="channels" class="chart"></div></article>
+      <article class="panel"><div class="panel-head"><div><span class="kicker">RETENTION</span><h2>周留存队列</h2></div></div><div id="retention" class="chart"></div></article>
+    </section>
+
+    <section class="grid bottom-grid">
+      <article class="panel"><div class="panel-head"><div><span class="kicker">MERCHANDISE</span><h2>商品收入 Top 8</h2></div></div><div class="table-wrap"><table><thead><tr><th>商品</th><th>品类</th><th>收入</th></tr></thead><tbody id="products"></tbody></table></div></article>
+      <article class="panel"><div class="panel-head"><div><span class="kicker">MONITORING</span><h2>异常日期诊断</h2></div></div><div id="anomalies" class="anomalies"></div><p class="footnote">异常判定：相对前 7 日用户数均值的绝对 Z 分数 ≥ 3。样例数据经过 Google 混淆，不作因果解释。</p></article>
+    </section>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

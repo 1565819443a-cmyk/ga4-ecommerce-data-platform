@@ -1,10 +1,10 @@
 {
-  "mode": "fixture",
+  "mode": "official_bigquery_export",
   "rules": 19,
-  "passed": 18,
-  "warnings": 0,
+  "passed": 17,
+  "warnings": 2,
   "failed": 0,
-  "not_applicable": 1,
+  "not_applicable": 0,
   "checks": [
     {
       "name": "事件非空",
@@ -22,8 +22,7 @@
       "name": "数据覆盖结束日",
       "severity": "critical",
       "failures": 0,
-      "status": "not_applicable",
-      "reason": "fixture 仅覆盖 5 个测试日期"
+      "status": "passed"
     },
     {
       "name": "用户标识非空",
@@ -106,14 +105,14 @@
     {
       "name": "订单ID非空",
       "severity": "warning",
-      "failures": 0,
-      "status": "passed"
+      "failures": 23,
+      "status": "warning"
     },
     {
       "name": "购买商品数量为正",
       "severity": "warning",
-      "failures": 0,
-      "status": "passed"
+      "failures": 448,
+      "status": "warning"
     },
     {
       "name": "商品收入非负",

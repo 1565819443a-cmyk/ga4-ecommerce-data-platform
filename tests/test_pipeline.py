@@ -26,12 +26,13 @@ def test_fixture_quality_passes(tmp_path):
     build(settings)
     report = run(settings)
     assert report["mode"] == "fixture"
-    assert report["rules"] == 14
+    assert report["rules"] == 19
+    assert report["warnings"] == 0
     assert report["failed"] == 0
 
 
 def test_platform_contract_exports(tmp_path):
     settings = fixture_settings(tmp_path)
     build(settings)
-    assert (settings.root / "data/platform/ga4_events.parquet").exists()
-    assert (settings.root / "data/platform/ga4_product_summary.parquet").exists()
+    assert (settings.root / "data/platform_fixture/ga4_events.parquet").exists()
+    assert (settings.root / "data/platform_fixture/ga4_product_summary.parquet").exists()

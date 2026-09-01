@@ -4,11 +4,14 @@ import json
 
 import duckdb
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from .config import Settings
 
 app = FastAPI(title="GA4 Ecommerce Analytics & Data Platform", version="1.0.0")
+ROOT = Settings.load().root
+app.mount("/dashboard", StaticFiles(directory=ROOT / "dashboard"), name="dashboard-assets")
 
 
 def query(sql: str) -> list[dict]:
@@ -30,7 +33,15 @@ def health():
 
 @app.get("/api/summary")
 def summary():
-    rows = query("SELECT sum(events) events,max(users) max_daily_users,sum(orders) orders,round(sum(revenue),2) revenue,min(event_date) start_date,max(event_date) end_date,(select data_mode from ads.build_metadata) data_mode FROM ads.daily_kpi")
+    rows = query("""SELECT count(*) events,count(DISTINCT user_pseudo_id) users,
+      count(DISTINCT session_id) sessions,
+      count(DISTINCT user_pseudo_id) FILTER (WHERE event_name='first_visit') new_users,
+      count(DISTINCT user_pseudo_id) FILTER (WHERE event_name='purchase') purchasers,
+      count(DISTINCT transaction_id) FILTER (WHERE event_name='purchase') orders,
+      round(sum(purchase_revenue),2) revenue,
+      round(100.0*count(DISTINCT session_id) FILTER (WHERE event_name='purchase')/nullif(count(DISTINCT session_id),0),2) session_conversion_pct,
+      min(event_date) start_date,max(event_date) end_date,
+      (select data_mode from ads.build_metadata) data_mode FROM dwd.events""")
     return rows[0]
 
 
@@ -71,4 +82,4 @@ def products():
 
 @app.get("/")
 def dashboard():
-    return FileResponse(Settings.load().root / "dashboard/index.html")
+    return RedirectResponse("/dashboard/index.html")
